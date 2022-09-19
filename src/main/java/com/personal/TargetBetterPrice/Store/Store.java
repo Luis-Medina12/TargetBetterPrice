@@ -1,89 +1,52 @@
 package com.personal.TargetBetterPrice.Store;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
-@Table
 public class Store {
-    @Id
-    @SequenceGenerator(
-            name = "store_sequence",
-            sequenceName = "store_sequence",
-            allocationSize = 1
-    )
 
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "store_sequence"
-    )
-    //private String storeData;
-    private String storeID;
+    private String location_id;
     private String distance;
-    private int zipCode;
-    //private double taxRate;
+    private String postal_code;
+    private String address;
+    private double taxRate;
+    private double currentPrice;
+    private double totalPrice;
 
-    public Store() {
-    }
-
-    public Store(String storeID, String distance, int zipCode) {
-        this.storeID = storeID;
+    public Store(String location_id, String distance, String postal_code, String address) {
+        this.location_id = location_id;
         this.distance = distance;
-        this.zipCode = zipCode;
+        this.postal_code = postal_code;
+        this.address = address;
     }
-
-//    public Store(String storeData) {
-//        this.storeData = storeData;
-//        //setStoreData();
-//    }
 
     public String getStoreID() {
-        return storeID;
+        return location_id;
     }
 
     public String getDistance() {
         return distance;
     }
 
-    public int getZipCode() {
-        return zipCode;
+    public String getZipCode() {
+        return postal_code;
     }
 
-//    public void setStoreData(String storeData) {
-//        this.storeData = storeData;
-//    }
-
-    public void setStoreID(String storeID) {
-        this.storeID = storeID;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDistance(String distance) {
-        this.distance = distance;
+    public void setTaxRate(double taxRate) {
+        this.taxRate = taxRate;
     }
 
-    public void setZipCode(int zipCode) {
-        this.zipCode = zipCode;
+    public double getCurrentPrice() {
+        return currentPrice;
     }
 
-//    public void setTaxRate(double taxRate) {
-//        this.taxRate = taxRate;
-//    }
+    public void setCurrentPrice(double currentPrice) {
+        this.currentPrice = currentPrice;
+        this.totalPrice = (currentPrice*taxRate) + currentPrice;
+    }
 
-    //    //This function will parse the store info and set each variable
-//    // TODO: 9/6/2022 Create new class of stores - will be a data structure to hold
-//    //  info on stores within given range
-//    private void setStoreData()
-//    {
-//        JsonObject data = new JsonParser().parse(this.storeData).getAsJsonObject();
-//        JsonArray jsonArray = (JsonArray) data.get("locations");
-//        JsonObject storeLoc = (JsonObject) jsonArray.get(0);
-//        JsonObject storeAdd = (JsonObject) storeLoc.get("address");
-//
-//        this.storeID = storeLoc.get("location_id").toString();
-//        this.distance = storeLoc.get("distance").toString();
-//        this.zipCode = Integer.parseInt(storeAdd.get("postal_code").toString().substring(1,6));
-//    }
+    public double getTotalPrice() {
+        return totalPrice;
+    }
 }
