@@ -5,16 +5,14 @@ public class Store {
     private String location_id;
     private String distance;
     private String postal_code;
-    private String address;
     private double taxRate;
     private double currentPrice;
     private double totalPrice;
 
-    public Store(String location_id, String distance, String postal_code, String address) {
+    public Store(String location_id, String distance, String postal_code) {
         this.location_id = location_id;
         this.distance = distance;
         this.postal_code = postal_code;
-        this.address = address;
     }
 
     public String getStoreID() {
@@ -29,9 +27,6 @@ public class Store {
         return postal_code;
     }
 
-    public String getAddress() {
-        return address;
-    }
 
     public void setTaxRate(double taxRate) {
         this.taxRate = taxRate;
@@ -43,7 +38,7 @@ public class Store {
 
     public void setCurrentPrice(double currentPrice) {
         this.currentPrice = currentPrice;
-        this.totalPrice = (currentPrice*taxRate) + currentPrice;
+        this.totalPrice = (double) Math.round(((currentPrice*taxRate) + currentPrice)*100)/100;
     }
 
     public double getTotalPrice() {

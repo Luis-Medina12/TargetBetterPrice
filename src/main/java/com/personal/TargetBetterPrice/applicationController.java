@@ -1,7 +1,7 @@
 package com.personal.TargetBetterPrice;
 
-import com.personal.TargetBetterPrice.Store.Store;
 import com.personal.TargetBetterPrice.Store.StoreInterface;
+import com.personal.TargetBetterPrice.Store.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +21,6 @@ public class applicationController {
     {
         storeService.insertStores(zip,tcin,distance);
 
-        return storeService.getStores();
+        return  storeService.getStores();
     }
 }
