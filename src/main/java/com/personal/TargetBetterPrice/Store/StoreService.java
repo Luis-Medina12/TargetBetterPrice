@@ -77,7 +77,6 @@ public class StoreService implements StoreInterface{
                 stores.remove(i);
             }
         }
-
     }
 
     @Override
@@ -88,7 +87,9 @@ public class StoreService implements StoreInterface{
     // Returns effective tax rate for zip code
     public double getTaxRate(String storeZip)
     {
-        String taxURI = "https://api.apilayer.com/tax_data/tax_rates?zip=" + storeZip + "&country=US";
+        //String taxURI = "https://api.apilayer.com/tax_data/tax_rates?zip=" + storeZip + "&country=US";
+
+        String taxURI ="https://230fa55e-acf6-4912-8733-05b3164c1d59.mock.pstmn.io/"+storeZip;
         headers.set("apikey", apiKey.getApiLayer());
 
         HttpEntity<Void> taxRequest = new HttpEntity<>(headers);
@@ -131,5 +132,4 @@ public class StoreService implements StoreInterface{
         }
         return 0;
     }
-
 }
