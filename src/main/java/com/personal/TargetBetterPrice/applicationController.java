@@ -23,4 +23,6 @@ public class applicationController {
 
         return  storeService.getStores();
     }
+
+
 }
