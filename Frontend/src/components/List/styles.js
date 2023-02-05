@@ -12,15 +12,15 @@ export default makeStyles((theme) => ({
     height: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center',
   },
   container: {
-    padding: '10px',
+    padding: '10px', 
   },
   marginBottom: {
     marginBottom: '30px',
   },
   list: {
-    height: '75vh', overflow: 'auto',
+    height: '75vh', overflow: 'auto', 
   },
   results:{
-    background: 'rgb(204 0 0)', padding: '10px', borderRadius: '10px', fontWeight:'bold', color:'white'
-  }
+    background: 'rgb(204 0 0)', padding: '10px', borderRadius: '10px', fontWeight:'bold', color:'white', fontSize: '1.75vw'
+  },
 }));

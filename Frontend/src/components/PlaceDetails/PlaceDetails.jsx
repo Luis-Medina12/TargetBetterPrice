@@ -37,19 +37,19 @@ const PlaceDetails = ({store, currLoc}) => {
                 image ={URL}
                 />
             <CardContent>
-                <Typography gutterBottom variant="h5">{data.storeName}</Typography>
+                <Typography gutterBottom className = {classes.storeName}>{data.storeName}</Typography>
                 <Box display="flex" justifyContent= "space-between" >
-                    <Typography variant="h6">Total Price</Typography>
+                    <Typography className = {classes.info}>Total Price</Typography>
                     <Typography gutterBottom 
-                                variant="subtitle1" 
+                                className = {classes.results} 
                                 align="justify">
                         ${(data.price+(data.price*data.taxrate)).toFixed(2)}
                     </Typography>
                 </Box>
                 <Box display="flex" justifyContent= "space-between" my={2}>
-                    <Typography variant="h6">Travel Distance</Typography>
+                    <Typography className = {classes.info}>Travel Distance</Typography>
                     <Typography gutterBottom 
-                                variant="subtitle1" 
+                                className = {classes.results} 
                                 align="justify">
                         {data.distance} miles
                         </Typography>
@@ -62,7 +62,7 @@ const PlaceDetails = ({store, currLoc}) => {
                 <Typography gutterBottom variant="h6" className={classes.subtitle}>
                     <LocationOnIcon fontSize="small"/>
                     <Typography gutterBottom 
-                        variant="subtitle1" 
+                        className = {classes.results} 
                         align="justify">
                         <a href={"https://www.google.com/maps/dir/?api=1&origin="+currLoc.lat+","+currLoc.lng+"&destination="+encodeURIComponent(data.address)} target="_blank">{data.address}</a>
                     </Typography>

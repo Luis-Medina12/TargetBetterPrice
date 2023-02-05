@@ -11,5 +11,17 @@ export default makeStyles(() => ({
   spacing: {
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
   },
+  storeName: {
+    display: 'flex', fontSize: '30px', fontWeight:'bold', justifyContent: 'center',
+  },
+  info: {
+    fontSize: '20px', fontWeight:'bold',
+  },
+  results: {
+    fontSize: '20px'
+  },
+  card: {
+    color:'red',
+  }
   
 }));

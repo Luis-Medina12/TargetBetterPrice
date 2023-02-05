@@ -14,7 +14,7 @@ const List = (data, currLocation) => {
             <br></br>
             <Grid container spacing = {3} className = {classes.list}>
                 {data.store?.map((store, i) => (
-                    <Grid item key = {i} xs = {12}>
+                    <Grid item key = {i} xs = {12} >
                         <PlaceDetails store ={store} currLoc = {data.currLocation}/>
                     </Grid>
 
