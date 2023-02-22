@@ -17,29 +17,31 @@ import java.util.ArrayList;
 @Service
 public class StoreService implements StoreInterface{
     private final ArrayList<Store> stores = new ArrayList<>();
-    ApiKeys apiKey = new ApiKeys();
+    private final ApiKeys apiKey = new ApiKeys();
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final HttpHeaders headers = new HttpHeaders();
 
     public void findStoresSingle(String homeZip, String tcin, String distance) {
         //TODO: isolate the API calls into own functions that can be used for both single and multi item calls
 
         RestTemplate restTemplate = new RestTemplate();
-        String storeURI = "https://target-com-store-product-reviews-locations-data.p.rapidapi.com/location/search?zip="
-                +homeZip+"&radius="+ distance;
-
-        //"https://4ba751f1-9947-47b0-b376-3fd9d1632b98.mock.pstmn.io";
+        // HttpHeaders headers = new HttpHeaders();
 
         // ------ API Request for locations within the given radius -----------------------------
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-RapidAPI-Key", apiKey.getRapidAPI());
-        headers.set("X-RapidAPI-Host","target-com-store-product-reviews-locations-data.p.rapidapi.com");
-        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(storeURI, HttpMethod.GET,
-                requestEntity,String.class);
-        JsonObject data = new JsonParser().parse(response.getBody()).getAsJsonObject();
+//        String storeURI = "https://target-com-store-product-reviews-locations-data.p.rapidapi.com/location/search?zip="
+//                +homeZip+"&radius="+ distance;
+//        //"https://4ba751f1-9947-47b0-b376-3fd9d1632b98.mock.pstmn.io";
+//
+//        headers.set("X-RapidAPI-Key", apiKey.getRapidAPI());
+//        headers.set("X-RapidAPI-Host","target-com-store-product-reviews-locations-data.p.rapidapi.com");
+//        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+//        ResponseEntity<String> response = restTemplate.exchange(storeURI, HttpMethod.GET,
+//                requestEntity,String.class);
+//        JsonObject data = new JsonParser().parse(response.getBody()).getAsJsonObject();
         // --------------------------------------------------------------------------------------
 
-        //Extract locations
-        JsonArray jsonArray = (JsonArray) data.get("locations");
+        //Get locations
+        JsonArray jsonArray = (JsonArray) getLocations(homeZip, distance).get("locations");
 
         // TODO: Create a loop to iterate through different locations
 
@@ -60,32 +62,33 @@ public class StoreService implements StoreInterface{
         Store store = new Store(storeId,storeDist,zip);
 
         // ---------- API request to determine if product is available in store -----------------
-        String productURI = "https://target-com-store-product-reviews-locations-data.p.rapidapi.com/product/details?store_id=" +
-                storeId+"&tcin=" + tcin;
-        headers.set("X-RapidAPI-Key", apiKey.getRapidAPI());
-        headers.set("X-RapidAPI-Host", "target-com-store-product-reviews-locations-data.p.rapidapi.com");
-        HttpEntity<Void> productRequest = new HttpEntity<>(headers);
-        ResponseEntity<String> productResponse = restTemplate.exchange(productURI, HttpMethod.GET,
-                productRequest,String.class);
-        JsonObject productData = new JsonParser().parse(productResponse.getBody()).getAsJsonObject();
+//        String productURI = "https://target-com-store-product-reviews-locations-data.p.rapidapi.com/product/details?store_id=" +
+//                storeId+"&tcin=" + tcin;
+//        headers.set("X-RapidAPI-Key", apiKey.getRapidAPI());
+//        headers.set("X-RapidAPI-Host", "target-com-store-product-reviews-locations-data.p.rapidapi.com");
+//        HttpEntity<Void> productRequest = new HttpEntity<>(headers);
+//        ResponseEntity<String> productResponse = restTemplate.exchange(productURI, HttpMethod.GET,
+//                productRequest,String.class);
+//        JsonObject productData = new JsonParser().parse(productResponse.getBody()).getAsJsonObject();
         // --------------------------------------------------------------------------------------
 
-        JsonObject productInfo = (JsonObject) productData.get("product");
+        // Call function that returns product info at specific store
+        JsonObject productInfo = (JsonObject) getProductInfo(storeId,tcin).get("product");
         JsonObject priceInfo = (JsonObject) productInfo.get("price");
 
         // Price of requested product
         double productPrice = Double.parseDouble(priceInfo.get("current_retail").toString());
 
         // ---------- API call to get tax rate at target location -------------------------------
-        String taxURI = "https://api.apilayer.com/tax_data/tax_rates?zip=" + zip + "&country=US";
-        headers.set("apikey", "48n1QGuhg6DP7ERxniyNs0l1L0ItasrH");
-        HttpEntity<Void> taxRequest = new HttpEntity<>(headers);
-        ResponseEntity<String> taxResponse = restTemplate.exchange(taxURI, HttpMethod.GET,
-                taxRequest, String.class);
-        JsonObject taxData = new JsonParser().parse(taxResponse.getBody()).getAsJsonObject();
+//        String taxURI = "https://api.apilayer.com/tax_data/tax_rates?zip=" + zip + "&country=US";
+//        headers.set("apikey", "48n1QGuhg6DP7ERxniyNs0l1L0ItasrH");
+//        HttpEntity<Void> taxRequest = new HttpEntity<>(headers);
+//        ResponseEntity<String> taxResponse = restTemplate.exchange(taxURI, HttpMethod.GET,
+//                taxRequest, String.class);
+//        JsonObject taxData = new JsonParser().parse(taxResponse.getBody()).getAsJsonObject();
         // --------------------------------------------------------------------------------------
 
-        store.setTaxRate(Double.parseDouble(taxData.get("combined_rate").toString()));
+        store.setTaxRate(Double.parseDouble(getTaxRate(zip).get("combined_rate").toString()));
         store.setCurrentPrice(productPrice);
 
         // Add found store to list of stores
@@ -97,21 +100,41 @@ public class StoreService implements StoreInterface{
         return stores;
     }
 
+    // API Request for locations within the given radius
     public JsonObject getLocations(String zip, String distance){
-        JsonObject result = null;
 
-        return result;
+        String storeURI = "https://target-com-store-product-reviews-locations-data.p.rapidapi.com/location/search?zip="
+                +zip+"&radius="+ distance;
+        //"https://4ba751f1-9947-47b0-b376-3fd9d1632b98.mock.pstmn.io";
+        headers.set("X-RapidAPI-Key", apiKey.getRapidAPI());
+        headers.set("X-RapidAPI-Host","target-com-store-product-reviews-locations-data.p.rapidapi.com");
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(storeURI, HttpMethod.GET,
+                requestEntity,String.class);
+
+        return new JsonParser().parse(response.getBody()).getAsJsonObject();
     }
 
+    // API request to determine if product is available in store
     public JsonObject getProductInfo(String storeID, String tcin){
-        JsonObject result = null;
+        String productURI = "https://target-com-store-product-reviews-locations-data.p.rapidapi.com/product/details?store_id=" +
+                storeID+"&tcin=" + tcin;
+        headers.set("X-RapidAPI-Key", apiKey.getRapidAPI());
+        headers.set("X-RapidAPI-Host", "target-com-store-product-reviews-locations-data.p.rapidapi.com");
+        HttpEntity<Void> productRequest = new HttpEntity<>(headers);
+        ResponseEntity<String> productResponse = restTemplate.exchange(productURI, HttpMethod.GET,
+                productRequest,String.class);
 
-        return result;
+        return new JsonParser().parse(productResponse.getBody()).getAsJsonObject();
     }
 
-    public JsonObject getTaxRate(){
-        JsonObject result = null;
+    public JsonObject getTaxRate(String zip){
+        String taxURI = "https://api.apilayer.com/tax_data/tax_rates?zip=" + zip + "&country=US";
+        headers.set("apikey", "48n1QGuhg6DP7ERxniyNs0l1L0ItasrH");
+        HttpEntity<Void> taxRequest = new HttpEntity<>(headers);
+        ResponseEntity<String> taxResponse = restTemplate.exchange(taxURI, HttpMethod.GET,
+                taxRequest, String.class);
 
-        return result;
+        return new JsonParser().parse(taxResponse.getBody()).getAsJsonObject();
     }
 }
