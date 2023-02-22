@@ -16,11 +16,17 @@ public class applicationController {
     @Autowired
     StoreInterface storeService;
 
-    @RequestMapping(value = "/targetBetterPrice", method = RequestMethod.GET)
-    public ArrayList<Store> stores(@RequestParam String zip, int tcin, String distance)
+    @RequestMapping(value = "/targetBetterPrice/singleItem", method = RequestMethod.GET)
+    public ArrayList<Store> stores(@RequestParam String zip, String tcin, String distance)
     {
-        storeService.insertStores(zip,tcin,distance);
-
+        storeService.findStoresSingle(zip,tcin,distance);
         return  storeService.getStores();
     }
+
+//    @RequestMapping(value = "/targetBetterPrice/multipleItems", method = RequestMethod.GET)
+//    public ArrayList<Store> stores(@RequestParam String zip, int[] tcin, String distance)
+//    {
+//        storeService.findStoresMultiple(zip,tcin[1],distance);
+//        return  storeService.getStores();
+//    }
 }
