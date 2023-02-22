@@ -96,4 +96,22 @@ public class StoreService implements StoreInterface{
     public ArrayList<Store> getStores() {
         return stores;
     }
+
+    public JsonObject getLocations(String zip, String distance){
+        JsonObject result = null;
+
+        return result;
+    }
+
+    public JsonObject getProductInfo(String storeID, String tcin){
+        JsonObject result = null;
+
+        return result;
+    }
+
+    public JsonObject getTaxRate(){
+        JsonObject result = null;
+
+        return result;
+    }
 }
