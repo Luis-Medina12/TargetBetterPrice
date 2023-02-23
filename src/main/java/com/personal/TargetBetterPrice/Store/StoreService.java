@@ -24,7 +24,7 @@ public class StoreService implements StoreInterface{
     public void findStoresSingle(String homeZip, String tcin, String distance) {
         //TODO: isolate the API calls into own functions that can be used for both single and multi item calls
 
-        RestTemplate restTemplate = new RestTemplate();
+        // RestTemplate restTemplate = new RestTemplate();
         // HttpHeaders headers = new HttpHeaders();
 
         // ------ API Request for locations within the given radius -----------------------------
@@ -93,6 +93,33 @@ public class StoreService implements StoreInterface{
 
         // Add found store to list of stores
         stores.add(store);
+    }
+
+    public void findStoresMultiple(String homeZip, String tcin, String distance) {
+        //Gets locations around customer and creates array with info
+        JsonArray jsonArray = (JsonArray) getLocations(homeZip, distance).get("locations");
+
+        JsonObject storeLoc = (JsonObject) jsonArray.get(0);
+        // Store Address
+        JsonObject storeAddress = (JsonObject) storeLoc.get("address");
+
+        // Store ID
+        String storeID = storeLoc.get("location_id").toString();
+
+        // Store Distance from home ZIP
+        String storeDist = storeLoc.get("distance").toString();
+
+        // Store ZIP
+        String zip = storeAddress.get("postal_code").toString().substring(1,6);
+
+        // Create new store object with extracted info
+        Store store = new Store(storeID,storeDist,zip);
+
+        //TODO: grab product info for every store
+
+
+        // TODO: add stores with >0 products into stores array
+
     }
 
     @Override

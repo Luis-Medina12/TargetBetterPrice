@@ -20,6 +20,7 @@ public class applicationController {
     public ArrayList<Store> stores(@RequestParam String zip, String tcin, String distance)
     {
         storeService.findStoresSingle(zip,tcin,distance);
+
         return  storeService.getStores();
     }
 
