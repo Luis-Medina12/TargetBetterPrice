@@ -2,13 +2,10 @@ import React, {useEffect, useState} from "react";
 import List from "./components/List/List";
 import Map from "./components/Map/Map";
 import Footer from "./components/Footer/Footer";
-import {getTaxData} from './components/api';
 import useStyles from './components/Headers/styles'
 import { Autocomplete, Data } from "@react-google-maps/api";
 import { Toolbar, AppBar, Typography, InputBase, Box, Button, CssBaseline, Grid } from "@material-ui/core";
-import SearchIcon from '@material-ui/icons/Search'
 import MoneyOffIcon from '@material-ui/icons/MoneyOff';
-import styles from './styles.css'
 
 import {getStoreData} from "./components/dataManagement/Data";
 
@@ -128,14 +125,14 @@ const App = () => {
         }
       </Grid>
       <Grid item xs={12} md = {7}>
-      {responseData.length!= 0 &&
+      {/* {responseData.length!= 0 &&
           <Map
           setCoordinates={setCoordinates}
           setBounds = {setBounds}
           coordinates = {coordinates}
           stores = {responseData}
           home = {home}/>
-        }
+        } */}
       </Grid>
     </Grid>
     <Footer/>
