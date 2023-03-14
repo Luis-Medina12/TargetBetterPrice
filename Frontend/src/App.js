@@ -6,7 +6,7 @@ import useStyles from './components/Headers/styles'
 import { Autocomplete, Data } from "@react-google-maps/api";
 import { Toolbar, AppBar, Typography, InputBase, Box, Button, CssBaseline, Grid } from "@material-ui/core";
 import MoneyOffIcon from '@material-ui/icons/MoneyOff';
-
+import styles from './styles.css'
 import {getStoreData} from "./components/dataManagement/Data";
 
 function OutputData(address, storeName, price, distance, taxrate, lon, lat){
@@ -118,6 +118,7 @@ const App = () => {
     </AppBar>
     <Grid container spacing={2} style = {{width: '100%'}}>
       <Grid item xs={12} md={5}>
+        {/* {responseData.length === 0 && <List store ={null}/>} */}
         {responseData.length!= 0 &&
           <List store = {responseData}
           currLocation = {coordinates}

@@ -26,6 +26,7 @@ const PlaceDetails = ({store, currLoc}) => {
 
     const data = JSON.parse(JSON.stringify(store));
     const classes = useStyles();
+
     const URL = 'https://images.foxtv.com/static.fox35orlando.com/www.fox35orlando.com/content/'+
                 'uploads/2020/08/932/524/New-Target-Orlando27.jpg?ve=1&tl=1';
 
