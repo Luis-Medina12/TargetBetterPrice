@@ -7,7 +7,8 @@ import { Autocomplete, Data } from "@react-google-maps/api";
 import { Toolbar, AppBar, Typography, InputBase, Box, Button, CssBaseline, Grid } from "@material-ui/core";
 import MoneyOffIcon from '@material-ui/icons/MoneyOff';
 import styles from './styles.css'
-import {getStoreData} from "./components/dataManagement/Data";
+import {getStores} from "./components/dataManagement/Data";
+import Instructions from "./components/Instructions/Instructions";
 
 function OutputData(address, storeName, price, distance, taxrate, lon, lat){
     this.address = address;
@@ -45,17 +46,14 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    //Object.values(input).includes(null) ||Object.values(input).includes('')
     if(Object.values(input).includes(null) ||Object.values(input).includes('')){
       alert("Enter all fields");
     }
     else{
-      //const original_data = JSON.parse(JSON.stringify(exampleResp)); saving this when testing with live data
-
+      
       // Use user input to fetch stores with product in stock
-      const stores = getStoreData(input.tcin,input.zip, input.distance);
+      const stores = getStores(input.tcin,input.zip, input.distance);
       setResponseData(stores);
-      console.log(responseData);
     }
   };
     
@@ -116,9 +114,9 @@ const App = () => {
         
       </Toolbar>
     </AppBar>
+    {responseData.length === 0 && <Instructions/>}
     <Grid container spacing={2} style = {{width: '100%'}}>
       <Grid item xs={12} md={5}>
-        {/* {responseData.length === 0 && <List store ={null}/>} */}
         {responseData.length!= 0 &&
           <List store = {responseData}
           currLocation = {coordinates}
@@ -126,14 +124,14 @@ const App = () => {
         }
       </Grid>
       <Grid item xs={12} md = {7}>
-      {/* {responseData.length!= 0 &&
+      {responseData.length!= 0 &&
           <Map
           setCoordinates={setCoordinates}
           setBounds = {setBounds}
           coordinates = {coordinates}
           stores = {responseData}
           home = {home}/>
-        } */}
+        }
       </Grid>
     </Grid>
     <Footer/>

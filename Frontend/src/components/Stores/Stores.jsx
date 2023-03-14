@@ -2,8 +2,6 @@ import React, {useEffect, useState} from "react";
 
 
 const Stores = (storeData) =>{
-
-    console.log("Made it to stores")
     
     console.log(storeData.data)
 

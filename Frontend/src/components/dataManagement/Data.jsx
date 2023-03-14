@@ -1,13 +1,19 @@
 import {zips} from './TaxData';
 import { productResp } from './ProductData';
 import { locationsResp } from './LocationData';
+import axios from 'axios';
+
+import { getPlacesData, getProductData} from '../api';
+import { Place } from '@material-ui/icons';
 
 // takes in a tcin, zip, and distance from user
 // will return an array of stores containing the storeName, totalPrice, travelDistance, and address
-export const getStoreData = (tcin, zip, distance) =>{
-
+export const getStores = (tcin, zip, distance) =>{
     const stores = [];
-    
+    const places = getStoreData();
+
+    console.log(places);
+
     for(const store of locationsResp.locations)
     {
       const info = new OutputData(store.address.address_line1, 
@@ -16,9 +22,9 @@ export const getStoreData = (tcin, zip, distance) =>{
         store.geographic_specifications.longitude, 
         store.geographic_specifications.latitude);
         stores.push(info);
-
     };
 
+    stores.sort((a,b) => a.price - b.price);
     return stores;
 }
 
@@ -32,14 +38,31 @@ function OutputData(address, storeName, price, distance, taxrate, lon, lat){
     this.lat = lat;
 }
 
-const getTaxRate = (zip) =>{
-  for(const city of zips.data)
+// Map tax rates on initial render for easy access
+const taxRates = new Map();
+for(const city of zips.data)
   {
-    if(city.zip === zip)
-    {
-      return city.combined_rate;
-    }
+    taxRates.set(city.zip, city.combined_rate);
   }
-  return 0;
 
+const getTaxRate = (zip) =>{
+  return taxRates.get(zip);
+}
+
+const getLocations = () =>{
+  
+}
+
+const getStoreData = async () => {
+
+  const URL = 'https://8031d83b-398e-47cb-a622-9a364682a8e3.mock.pstmn.io/stores';
+  try{
+    const {data: {data}}  = await axios.get(URL);
+    
+    return data;
+
+  } catch(error){
+      console.log(error);
+
+  }
 }
