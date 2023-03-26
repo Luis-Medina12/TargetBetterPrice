@@ -7,11 +7,11 @@ import { Autocomplete, Data } from "@react-google-maps/api";
 import { Toolbar, AppBar, Typography, InputBase, Box, Button, CssBaseline, Grid } from "@material-ui/core";
 import MoneyOffIcon from '@material-ui/icons/MoneyOff';
 import styles from './styles.css'
-import {getStores} from "./components/dataManagement/Data";
+import {getStores, getProduct} from "./components/dataManagement/Data";
 import Instructions from "./components/Instructions/Instructions";
 import { productResp } from './components/dataManagement/ProductData';
 import {getTaxRate} from './components/dataManagement/Data'
-
+import axios from 'axios';
 
 function OutputData(address, storeName, price, distance, taxrate, lon, lat){
     this.address = address;
@@ -22,6 +22,7 @@ function OutputData(address, storeName, price, distance, taxrate, lon, lat){
     this.lon = lon;
     this.lat = lat;
 }
+
 const App = () => {
 
   const classes = useStyles();
@@ -53,25 +54,45 @@ const App = () => {
       alert("Enter all fields");
     }
     else{
-      
-      // Use user input to fetch stores with product in stock
-      const apiData = getStores(input.tcin,input.zip, input.distance);
+
+
+
       const stores = [];
+      // Use user input to fetch store location data of stores with product
+      const apiData = getStores(input.zip, input.distance);
+
+      // process the promise returned by getStores()
       apiData.then(data => {
         for(const store of data.locations)
         {
-          const info = new OutputData(store.address.address_line1, 
-            store.location_names[0].name, productResp.product.price.current_retail, store.distance, 
-            getTaxRate(store.address.postal_code.substring(0,5)), 
-            store.geographic_specifications.longitude, 
-            store.geographic_specifications.latitude);
-            stores.push(info);
+          const product = getProduct(input.tcin, store.location_id);
+          
+          product.then(product => {
+            
+            if(product.data.product.fulfillment.store_options[0].order_pickup.availability_status === 'IN_STOCK')
+            {
+              const info = new OutputData(store.address.address_line1, 
+                store.location_names[0].name, 
+                product.data.product.price.current_retail, 
+                store.distance, 
+                getTaxRate(store.address.postal_code.substring(0,5)), // for now will use pre-set tax data
+                store.geographic_specifications.longitude, 
+                store.geographic_specifications.latitude);
+              
+              stores.push(info);
+            }else{
+              console.log("not in stock")
+            }
+          })
         };
     
         stores.sort((a,b) => a.price - b.price);
+        console.log(stores);
   
         setResponseData(stores);
       })
+
+
     }
   };
     
@@ -135,14 +156,14 @@ const App = () => {
     {responseData.length === 0 && <Instructions/>}
     <Grid container spacing={2} style = {{width: '100%'}}>
       <Grid item xs={12} md={5}>
-        {responseData.length!= 0 &&
+        {responseData.length!== 0 &&
           <List store = {responseData}
           currLocation = {coordinates}
           />
         }
       </Grid>
       <Grid item xs={12} md = {7}>
-      {responseData.length!= 0 &&
+      {responseData.length!== 0 &&
           <Map
           setCoordinates={setCoordinates}
           setBounds = {setBounds}
