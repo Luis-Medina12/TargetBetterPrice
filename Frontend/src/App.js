@@ -9,7 +9,8 @@ import MoneyOffIcon from '@material-ui/icons/MoneyOff';
 import styles from './styles.css'
 import {getStores, getProduct} from "./components/dataManagement/Data";
 import Instructions from "./components/Instructions/Instructions";
-import { productResp } from './components/dataManagement/ProductData';
+import { productResp} from './components/dataManagement/ProductData';
+import { locationsResp } from "./components/dataManagement/LocationData";
 import {getTaxRate} from './components/dataManagement/Data'
 import axios from 'axios';
 
@@ -47,6 +48,12 @@ const App = () => {
     }));
   };
 
+  const handleReset = (event) =>{
+    event.preventDefault();
+  }
+
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -55,42 +62,45 @@ const App = () => {
     }
     else{
 
-
-
       const stores = [];
       // Use user input to fetch store location data of stores with product
-      const apiData = getStores(input.zip, input.distance);
+      
+      //const apiData = getStores(input.zip, input.distance); pull from API
+
+      const apiData = locationsResp;
 
       // process the promise returned by getStores()
-      apiData.then(data => {
-        for(const store of data.locations)
+      //apiData.then(data => {
+        //for(const store of data.locations)
+        for(const store of apiData.locations)
         {
-          const product = getProduct(input.tcin, store.location_id);
-          
-          product.then(product => {
+          //const productResponse = getProduct(input.tcin, store.location_id);
+          const productResponse = productResp;
+          //productResponse.then(product => {
             
-            if(product.data.product.fulfillment.store_options[0].order_pickup.availability_status === 'IN_STOCK')
+            //if(product.data.product.fulfillment.store_options[0].order_pickup.availability_status === 'IN_STOCK')
             {
               const info = new OutputData(store.address.address_line1, 
                 store.location_names[0].name, 
-                product.data.product.price.current_retail, 
+                productResponse.product.price.current_retail, 
                 store.distance, 
                 getTaxRate(store.address.postal_code.substring(0,5)), // for now will use pre-set tax data
                 store.geographic_specifications.longitude, 
                 store.geographic_specifications.latitude);
               
               stores.push(info);
-            }else{
-              console.log("not in stock")
             }
-          })
+            // else{
+            //   console.log("not in stock")
+            // }
+          //})
         };
     
         stores.sort((a,b) => a.price - b.price);
         console.log(stores);
   
         setResponseData(stores);
-      })
+      //})
 
 
     }
@@ -145,6 +155,13 @@ const App = () => {
               variant="outlined" color="default" 
               className={classes.submit} 
               onClick = {handleSubmit}
+            > Submit
+            </Button>
+
+            <Button 
+              variant="outlined" color="default" 
+              className={classes.submit} 
+              onClick = {handleReset}
             > Submit
             </Button>
 
