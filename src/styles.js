@@ -11,12 +11,9 @@ export default makeStyles((theme) => ({
     position: 'relative',
     display: 'flex',
     borderRadius: theme.shape.bord,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': { backgroundColor: alpha(theme.palette.common.white, 0.25) },
     marginRight: theme.spacing(2),
     marginLeft: '5px',
     width: '100%',
-    [theme.breakpoints.up('sm')]: { marginLeft: theme.spacing(3), width: 'auto' },
   },
   searchIcon: {
     padding: theme.spacing(0, 2), height: '100%', position: 'absolute', pointerEvents: 'none', display: 'flex', alignItems: 'flex-srart', justifyContent: 'center',
@@ -37,27 +34,17 @@ export default makeStyles((theme) => ({
   toolbar: {
     justifyContent: 'center', backgroundColor: 'rgb(204, 0, 0)'
   },
-  submit: {  
+  button: {  
     color: 'white',
     padding: '5px', 
     boxShadow: '2px 2px 2px black',
     borderRadius: '10px',
     fontSize: 'medium',
-    marginTop:'10px',
-    width:'12%',
+    width:'100px',
     height:'40px',
-    background:'grey',
-  },
-  reset: {  
-    color: 'white',
-    padding: '5px', 
-    boxShadow: '2px 2px 2px black',
-    borderRadius: '10px',
-    fontSize: 'medium',
-    marginTop:'10px',
-    width:'12%',
-    height:'40px',
-    background:'grey',
+    background:'rgb(204 0 0)',
+    fontWeight:'bold',
+    marginLeft:'10px',
   },
   box:{
     display:'flex',

@@ -48,11 +48,25 @@ const App = () => {
     }));
   };
 
+  // Simple Reset - removes any response data my setting to empty array
+  // input values are also cleared
   const handleReset = (event) =>{
     event.preventDefault();
+    setResponseData([]);
+    setInput(prevState => ({
+      ...prevState,
+      zip : null,
+      distance: null,
+      tcin: null,
+    }));
+
+    let resetInput = document.getElementById('zip');
+    resetInput.value = '';
+    resetInput = document.getElementById('tcin');
+    resetInput.value = '';
+    resetInput = document.getElementById('distance');
+    resetInput.value = '';
   }
-
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -97,23 +111,19 @@ const App = () => {
         };
     
         stores.sort((a,b) => a.price - b.price);
-        console.log(stores);
   
         setResponseData(stores);
       //})
 
-
     }
   };
     
-
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(({coords: {latitude, longitude} }) =>{
       setCoordinates({lat: latitude, lng: longitude});
     })
 
   }, []);
-
 
   return (
     <>
@@ -126,11 +136,12 @@ const App = () => {
           <MoneyOffIcon fontSize="large"/>
         </Typography>
         <Box paddingLeft={15} className = {classes.box}>
-          <div clasName = {classes.search}>  
+          <div className = {classes.search}>  
             <input
               placeholder = "TCIN"
               type="number"
               name="tcin"
+              id= "tcin"
               onChange={handleInputChange}
               className= "inputBox"
             />
@@ -139,6 +150,7 @@ const App = () => {
               placeholder = "Home Zip"
               type="number"
               name="zip"
+              id="zip"
               onChange={handleInputChange}
               className= "inputBox"
             />
@@ -147,23 +159,24 @@ const App = () => {
               placeholder = "Distance"
               type="number"
               name="distance"
+              id="distance"
               onChange={handleInputChange}
               className= "inputBox"
             />
 
             <button  
-              className={classes.submit} 
+              // variant="outlined" color="default" 
+              className={classes.button} 
               onClick = {handleSubmit}
             > Submit
             </button>
 
             <button  
-              className={classes.reset} 
+              variant="outlined" color="default" 
+              className={classes.button} 
               onClick = {handleReset}
             > Reset
             </button>
-            
-
           </div>
         </Box>
         
