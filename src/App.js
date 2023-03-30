@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import List from "./components/List/List";
 import Map from "./components/Map/Map";
 import Footer from "./components/Footer/Footer";
-import useStyles from './components/Headers/styles'
+import useStyles from './styles'
 import { Autocomplete, Data } from "@react-google-maps/api";
 import { Toolbar, AppBar, Typography, InputBase, Box, Button, CssBaseline, Grid } from "@material-ui/core";
 import MoneyOffIcon from '@material-ui/icons/MoneyOff';
@@ -125,8 +125,8 @@ const App = () => {
           Target Better Price
           <MoneyOffIcon fontSize="large"/>
         </Typography>
-        <Box paddingLeft={15}>
-          <div clasName = {classes.search} disableGutters>  
+        <Box paddingLeft={15} className = {classes.box}>
+          <div clasName = {classes.search}>  
             <input
               placeholder = "TCIN"
               type="number"
@@ -151,19 +151,18 @@ const App = () => {
               className= "inputBox"
             />
 
-            <Button 
-              variant="outlined" color="default" 
+            <button  
               className={classes.submit} 
               onClick = {handleSubmit}
             > Submit
-            </Button>
+            </button>
 
-            <Button 
-              variant="outlined" color="default" 
-              className={classes.submit} 
+            <button  
+              className={classes.reset} 
               onClick = {handleReset}
-            > Submit
-            </Button>
+            > Reset
+            </button>
+            
 
           </div>
         </Box>
