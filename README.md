@@ -9,6 +9,6 @@ Phase 1 (complete) - determine total price of a specific product from a specific
 
 Phase 2 (complete) - determine what locations around input ZIP have the product.
 
-Phase 3 (complete) - build simple front-end using 
+Phase 3 (complete) - build simple front-end using React library
 
 Phase 4 (in-progress) - enable the ability to create a list of Products
